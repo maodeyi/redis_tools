@@ -98,7 +98,6 @@ public class ReadThread extends Thread {
         Map<String, Long> costMapPerThread = new HashMap<>();
         int begin = repeats * index + 1;
         int end = repeats * (index + 1);
-        System.out.println("begin: " + begin + "end :" + end);
         for (int i = begin; i <= end; i++) {
         	String key = key_prefix + i;
 //        for (int i = 1; i <= repeats; i++) {

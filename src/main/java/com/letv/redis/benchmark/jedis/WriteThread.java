@@ -101,11 +101,9 @@ public class WriteThread extends Thread {
         Map<String, Long> costMapPerThread = new HashMap<>();
         int begin = repeats * index + 1;
         int end = repeats * (index + 1);
-        System.out.println("begin: " + begin + "end :" + end);
         for (int i = begin ; i <= end; i++) {
        // for (int i = 1; i <= repeats; i++) {
         	String key = key_prefix + i;
-        	System.out.println(key);
         	//String key = StringGenerator.RandomString(key_bytes);
           	long startTime = System.nanoTime();
             String value =StringGenerator.RandomString(value_bytes);
