@@ -42,10 +42,10 @@ public class JedisMain {
                  barrier.await();
                  long estimatedTime = System.nanoTime() - startTime;
 
-                 float totalRepeat = Cli.repeatCount;
+                 float totalRepeat = Cli.repeatCount * Cli.threadCount;
 
                  System.out.println("JedisMain setkey finish, cost time = "
-                         + estimatedTime + "ns, " + "get count = " + totalRepeat
+                         + estimatedTime + "ns, " + "set count = " + totalRepeat
                          + ", ops = " + (totalRepeat / estimatedTime)
                          * Constants.seed);
 
@@ -77,7 +77,7 @@ public class JedisMain {
                 ArrayList<Thread> threadList = new ArrayList<>();
 
                 for (int i = 0; i < Cli.threadCount; i++) {
-                    threadList.add(new ReadThread(jedisCluster, barrier));
+                    threadList.add(new ReadThread(jedisCluster, barrier, i));
                 }
 
                 for (int j = 0; j < threadList.size(); j++) {
@@ -178,7 +178,7 @@ public class JedisMain {
                 ArrayList<Thread> threadList = new ArrayList<>();
 
                 for (int i = 0; i < Cli.threadCount; i++) {
-                    threadList.add(new ReadThread(pool, barrier));
+                    threadList.add(new ReadThread(pool, barrier, i));
                 }
 
                 for (int j = 0; j < threadList.size(); j++) {

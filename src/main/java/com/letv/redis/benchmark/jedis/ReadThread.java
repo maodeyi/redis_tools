@@ -14,16 +14,20 @@ public class ReadThread extends Thread {
     protected JedisCluster jedisCluster;
     protected CyclicBarrier barrier;
     private Map<String, Long> costMapPerThread;
+    private int index;
 
-    public ReadThread(JedisPool pool, CyclicBarrier barrier) {
+    public ReadThread(JedisPool pool, CyclicBarrier barrier, int index) {
         this.pool = pool;
         this.barrier = barrier;
+        this.index = index;
     }
 
-    public ReadThread(JedisCluster jedisCluster, CyclicBarrier barrier) {
+    public ReadThread(JedisCluster jedisCluster, CyclicBarrier barrier, int index) {
         this.jedisCluster = jedisCluster;
         this.barrier = barrier;
+        this.index = index;
     }
+
 
     public void run() {
 
@@ -31,9 +35,9 @@ public class ReadThread extends Thread {
             barrier.await();
 
             if (Cli.enableCluster) {
-                this.setCostMapPerThread(getKey(jedisCluster, Cli.repeatCount));
+                this.setCostMapPerThread(getKey(jedisCluster, Cli.repeatCount, Cli.key_prefix));
             } else {
-                this.setCostMapPerThread(getKey(pool, Cli.repeatCount));
+                this.setCostMapPerThread(getKey(pool, Cli.repeatCount, Cli.key_prefix));
             }
 
             barrier.await();
@@ -43,20 +47,24 @@ public class ReadThread extends Thread {
     }
 
     private Map<String, Long> getKey(JedisPool pool,
-                                     int repeats) {
+                                     int repeats, String key_prefix) {
 
         Jedis jedis = pool.getResource();
         Thread thread = Thread.currentThread();
-        long thread_id = thread.getId();
+      //  long thread_id = thread.getId();
 
         long avgGetCostPerThread = 0;
         long maxGetCostPerThread = Long.MIN_VALUE;
         long minGetCostPerThread = Long.MAX_VALUE;
         long sumGetCostPerThread = 0;
         Map<String, Long> costMapPerThread = new HashMap<>();
-
-        for (int i = 1; i <= repeats; i++) {
-        	String key = "redis-check-noc-" +  thread_id  + i;
+        int begin = repeats * index + 1;
+        int end = repeats * (index + 1);
+        System.out.println("begin: " + begin + "end :" + end);
+        for (int i = begin + 1 ; i <= end; i++) {
+        	String key = key_prefix + i;
+//        for (int i = 1; i <= repeats; i++) {
+//        	String key = "redis-check-noc-" +  thread_id  + i;
             long startTime = System.nanoTime();
             jedis.get(key);
             long estimatedTime = System.nanoTime() - startTime;
@@ -82,16 +90,21 @@ public class ReadThread extends Thread {
     }
 
     private Map<String, Long> getKey(JedisCluster jedisCluster,
-                                     int repeats) {
+                                     int repeats, String key_prefix) {
 
         long avgGetCostPerThread = 0;
         long maxGetCostPerThread = Long.MIN_VALUE;
         long minGetCostPerThread = Long.MAX_VALUE;
         long sumGetCostPerThread = 0;
         Map<String, Long> costMapPerThread = new HashMap<>();
+        int begin = repeats * index + 1;
+        int end = repeats * (index + 1);
+        System.out.println("begin: " + begin + "end :" + end);
+        for (int i = begin + 1 ; i <= end; i++) {
+        	String key = key_prefix + i;
 
-        for (int i = 1; i <= repeats; i++) {
-            String key = "redis-check-noc-" + i;
+//        for (int i = 1; i <= repeats; i++) {
+//            String key = "redis-check-noc-" + i;
             long startTime = System.nanoTime();
             jedisCluster.get(key);
             long estimatedTime = System.nanoTime() - startTime;

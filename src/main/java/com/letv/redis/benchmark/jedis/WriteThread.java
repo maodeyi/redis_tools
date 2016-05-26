@@ -36,9 +36,9 @@ public class WriteThread extends Thread {
             barrier.await();
 
             if (Cli.enableCluster) {
-                this.setCostMapPerThread(setKey(jedisCluster, Cli.repeatCount, Cli.key_bytes, Cli.value_bytes, Cli.threadCount));
+                this.setCostMapPerThread(setKey(jedisCluster, Cli.repeatCount, Cli.value_bytes, Cli.key_prefix));
             } else {
-                this.setCostMapPerThread(setKey(pool, Cli.repeatCount, Cli.key_bytes, Cli.value_bytes, Cli.threadCount));
+                this.setCostMapPerThread(setKey(pool, Cli.repeatCount, Cli.value_bytes, Cli.key_prefix));
             }
 
             barrier.await();
@@ -48,7 +48,7 @@ public class WriteThread extends Thread {
     }
 
     private Map<String, Long> setKey(JedisPool pool,
-                                     int repeats, int key_bytes, int value_bytes, int threadcount) {
+                                     int repeats, int value_bytes, String key_prefix) {
 
         Jedis jedis = pool.getResource();
 
@@ -57,11 +57,13 @@ public class WriteThread extends Thread {
         long minSetCostPerThread = Long.MAX_VALUE;
         long sumSetCostPerThread = 0;
         Map<String, Long> costMapPerThread = new HashMap<>();
-        int end = (repeats / threadcount) * (index + 1);
-        int begin = (repeats / threadcount) * index;
+//        int end = (repeats / threadcount) * (index + 1);
+//        int begin = (repeats / threadcount) * index;
+        int begin = repeats * index + 1;
+        int end = repeats * (index + 1);
         System.out.println("begin: " + begin + "end :" + end);
         for (int i = begin + 1 ; i <= end; i++) {
-            String key = "redis-check-noc-" + i;
+        	String key = key_prefix + i;
            // String key = StringGenerator.RandomString(key_bytes);
         	long startTime = System.nanoTime();
             String value =StringGenerator.RandomString(value_bytes);
@@ -89,19 +91,19 @@ public class WriteThread extends Thread {
     }
 
     private Map<String, Long> setKey(JedisCluster jedisCluster,
-    								int repeats, int key_bytes, int value_bytes, int threadcount) {
+    								int repeats, int value_bytes, String key_prefix) {
 
         long avgSetCostPerThread = 0;
         long maxSetCostPerThread = Long.MIN_VALUE;
         long minSetCostPerThread = Long.MAX_VALUE;
         long sumSetCostPerThread = 0;
         Map<String, Long> costMapPerThread = new HashMap<>();
-        int end = (repeats / threadcount) * (index + 1);
-        int begin = (repeats / threadcount) * index;
+        int begin = repeats  * (index + 1);
+        int end = repeats * index;
         System.out.println("begin: " + begin + "end :" + end);
         for (int i = begin + 1 ; i <= end; i++) {
        // for (int i = 1; i <= repeats; i++) {
-        	String key = "redis-check-noc-" + i;
+        	String key = key_prefix + i;
         	//String key = StringGenerator.RandomString(key_bytes);
           	long startTime = System.nanoTime();
             String value =StringGenerator.RandomString(value_bytes);
