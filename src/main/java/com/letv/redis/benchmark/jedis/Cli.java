@@ -67,7 +67,7 @@ public class Cli {
             if (cmd.hasOption("kp")) {
                 log.log(Level.INFO,
                         "Using cli argument -kp=" + cmd.getOptionValue("kp"));
-                port = cmd.getOptionValue("kp");
+                key_prefix = cmd.getOptionValue("kp");
             } else { 
             	log.log(Level.SEVERE, "Missing kp option");
             	help();
