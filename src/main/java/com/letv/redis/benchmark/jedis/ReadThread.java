@@ -101,7 +101,6 @@ public class ReadThread extends Thread {
         System.out.println("begin: " + begin + "end :" + end);
         for (int i = begin; i <= end; i++) {
         	String key = key_prefix + i;
-
 //        for (int i = 1; i <= repeats; i++) {
 //            String key = "redis-check-noc-" + i;
             long startTime = System.nanoTime();

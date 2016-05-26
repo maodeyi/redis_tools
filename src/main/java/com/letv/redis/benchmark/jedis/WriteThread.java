@@ -64,6 +64,7 @@ public class WriteThread extends Thread {
         System.out.println("begin: " + begin + "end :" + end);
         for (int i = begin; i <= end; i++) {
         	String key = key_prefix + i;
+        	System.out.println(key);
            // String key = StringGenerator.RandomString(key_bytes);
         	long startTime = System.nanoTime();
             String value =StringGenerator.RandomString(value_bytes);
@@ -104,6 +105,7 @@ public class WriteThread extends Thread {
         for (int i = begin ; i <= end; i++) {
        // for (int i = 1; i <= repeats; i++) {
         	String key = key_prefix + i;
+        	System.out.println(key);
         	//String key = StringGenerator.RandomString(key_bytes);
           	long startTime = System.nanoTime();
             String value =StringGenerator.RandomString(value_bytes);
