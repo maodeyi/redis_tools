@@ -143,7 +143,7 @@ public class JedisMain {
                 barrier.await();
                 long estimatedTime = System.nanoTime() - startTime;
 
-                float totalRepeat = Cli.repeatCount;
+                float totalRepeat = Cli.repeatCount * Cli.threadCount;
 
                 System.out.println("JedisMain setkey finish, cost time = "
                         + estimatedTime + "ns, " + "set count = " + totalRepeat
