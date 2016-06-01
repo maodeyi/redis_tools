@@ -62,13 +62,10 @@ public class WriteThread extends Thread {
         int begin = repeats * index + 1;
         int end = repeats * (index + 1);
         for (int i = begin; i <= end; i++) {
-        	//String key = key_prefix + i;
-        	int rand  = 10 + (int)(Math.random() * 5000); 
-        	System.out.println(rand);
-            String key = StringGenerator.RandomString(rand);
+        	String key = key_prefix + i;
+           // String key = StringGenerator.RandomString(key_bytes);
         	long startTime = System.nanoTime();
-           // String value =StringGenerator.RandomString(value_bytes);
-        	String value =StringGenerator.RandomString(rand);
+            String value =StringGenerator.RandomString(value_bytes);
             jedis.set(key,value);
             long estimatedTime = System.nanoTime() - startTime;
 
