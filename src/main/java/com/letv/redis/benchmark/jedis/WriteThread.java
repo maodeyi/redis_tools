@@ -64,6 +64,7 @@ public class WriteThread extends Thread {
         for (int i = begin; i <= end; i++) {
         	//String key = key_prefix + i;
         	int rand  = 10 + (int)(Math.random() * 5000); 
+        	System.out.println(rand);
             String key = StringGenerator.RandomString(rand);
         	long startTime = System.nanoTime();
            // String value =StringGenerator.RandomString(value_bytes);
