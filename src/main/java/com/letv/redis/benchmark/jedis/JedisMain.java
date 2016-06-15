@@ -19,11 +19,18 @@ public class JedisMain {
         numberFormat.setMaximumFractionDigits(2);
         
         if(Cli.enablestentinel){
-        	String[] hostandport = Cli.sentinels.split(",");
         	HashSet<String> sentinels = new HashSet<String>();
-        	for(int i = 0; i < hostandport.length; i++)
-        	{
-        		sentinels.add(hostandport[i]);
+        	if(Cli.sentinels.contains(",")){
+        		String[] hostandport = Cli.sentinels.split(",");
+            	
+            	for(int i = 0; i < hostandport.length; i++)
+            	{
+            		sentinels.add(hostandport[i]);
+            	}
+            	
+        	}
+        	else{
+        		sentinels.add(Cli.sentinels);
         	}
         	JedisSentinelPool sentinelPool = new JedisSentinelPool("mymaster", sentinels, config, Cli.opTimeout);
         	
