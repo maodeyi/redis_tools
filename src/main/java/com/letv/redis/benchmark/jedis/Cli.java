@@ -21,6 +21,7 @@ public class Cli {
     public static boolean enableCluster;
     public static boolean enablestentinel;
     public static String sentinels;
+    public static String passwd;
 
     public Cli(String[] args) {
 
@@ -50,6 +51,8 @@ public class Cli {
         		"Specifies true or false.");
         options.addOption("sentinels", "sentinels", true, 
         		"sentinels ip:host,ip:host");
+        options.addOption("passwd", "passwd", true, 
+        		"passwd for master");
     }
 
     public void parse() {
@@ -168,7 +171,12 @@ public class Cli {
                 }
             }
             
-
+            if (cmd.hasOption("passwd")) {
+                log.log(Level.INFO,
+                        "Using cli argument -passwd="
+                                + cmd.getOptionValue("passwd"));
+                passwd = cmd.getOptionValue("passwd");
+            } 
         } catch (ParseException e) {
             log.log(Level.SEVERE, "Failed to parse comand line properties", e);
             help();

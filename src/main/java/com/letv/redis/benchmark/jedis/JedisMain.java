@@ -32,7 +32,7 @@ public class JedisMain {
         	else{
         		sentinels.add(Cli.sentinels);
         	}
-        	JedisSentinelPool sentinelPool = new JedisSentinelPool("mymaster", sentinels, config, Cli.opTimeout);
+        	JedisSentinelPool sentinelPool = new JedisSentinelPool("mymaster", sentinels, config, Cli.opTimeout, Cli.passwd);
         	
             if (Cli.operation.equals("set")) {
             	System.out.println("JedisMain setkey startup");
