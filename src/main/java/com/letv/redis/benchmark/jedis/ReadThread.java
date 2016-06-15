@@ -74,6 +74,7 @@ public class ReadThread extends Thread {
 		//for (int i = 1; i <= repeats; i++) {
 		//String key = "redis-check-noc-" +  thread_id  + i;
 		long startTime = System.nanoTime();
+		jedis.auth(Cli.passwd);
 		jedis.get(key);
 		long estimatedTime = System.nanoTime() - startTime;
 		

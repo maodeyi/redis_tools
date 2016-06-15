@@ -76,6 +76,7 @@ public class WriteThread extends Thread {
 		// String key = StringGenerator.RandomString(key_bytes);
 		long startTime = System.nanoTime();
 		String value =StringGenerator.RandomString(value_bytes);
+		jedis.auth(Cli.passwd);
 		jedis.set(key,value);
 		long estimatedTime = System.nanoTime() - startTime;
 		
