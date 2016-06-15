@@ -19,6 +19,8 @@ public class Cli {
     public static String operation;
     public static int opTimeout;
     public static boolean enableCluster;
+    public static boolean enablestentinel;
+    public static String sentinels;
 
     public Cli(String[] args) {
 
@@ -44,6 +46,10 @@ public class Cli {
                 "Specifies set or get operation timeout.");
         options.addOption("enableCluster", "enable Cluster", true,
                 "Specifies true or false.");
+        options.addOption("enablestentinel", "enable stentinel", true, 
+        		"Specifies true or false.");
+        options.addOption("sentinels", "sentinels", true, 
+        		"sentinels ip:host,ip:host");
     }
 
     public void parse() {
@@ -135,16 +141,33 @@ public class Cli {
                 log.log(Level.SEVERE, "Missing opTimeout option");
                 help();
             }
-
-            if (cmd.hasOption("enableCluster")) {
-                log.log(Level.INFO,
-                        "Using cli argument -enableCluster="
-                                + cmd.getOptionValue("enableCluster"));
-                enableCluster = Boolean.valueOf(cmd.getOptionValue("enableCluster"));
-            } else {
-                log.log(Level.SEVERE, "Missing enableCluster option");
-                help();
+            
+            if(cmd.hasOption("enablestentinel")){
+            	 log.log(Level.INFO,
+                         "Using cli argument -enablestentinel="
+                                 + cmd.getOptionValue("enablestentinel"));
+            	 enablestentinel = Boolean.valueOf(cmd.getOptionValue("enablestentinel"));
+            	 if (cmd.hasOption("sentinels")) {
+                     log.log(Level.INFO,
+                             "Using cli argument -sentinels="
+                                     + cmd.getOptionValue("sentinels"));
+                     enableCluster = Boolean.valueOf(cmd.getOptionValue("sentinels"));
+                 } else {
+                     log.log(Level.SEVERE, "Missing sentinels option");
+                     help();
+                 }
+            }else{
+            	if (cmd.hasOption("enableCluster")) {
+                    log.log(Level.INFO,
+                            "Using cli argument -enableCluster="
+                                    + cmd.getOptionValue("enableCluster"));
+                    enableCluster = Boolean.valueOf(cmd.getOptionValue("enableCluster"));
+                } else {
+                    log.log(Level.SEVERE, "Missing enableCluster option");
+                    help();
+                }
             }
+            
 
         } catch (ParseException e) {
             log.log(Level.SEVERE, "Failed to parse comand line properties", e);
