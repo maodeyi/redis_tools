@@ -151,7 +151,7 @@ public class Cli {
                      log.log(Level.INFO,
                              "Using cli argument -sentinels="
                                      + cmd.getOptionValue("sentinels"));
-                     enableCluster = Boolean.valueOf(cmd.getOptionValue("sentinels"));
+                     sentinels =cmd.getOptionValue("sentinels");
                  } else {
                      log.log(Level.SEVERE, "Missing sentinels option");
                      help();
