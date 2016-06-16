@@ -103,7 +103,6 @@ public class WriteThread extends Thread {
 
     private Map<String, Long> setKey(JedisPool pool,
                                      int repeats, int value_bytes, String key_prefix) {
-
         Jedis jedis = pool.getResource();
 
         long avgSetCostPerThread = 0;
@@ -133,7 +132,7 @@ public class WriteThread extends Thread {
         }
 
         if (jedis != null) {
-            pool.returnResource(jedis);
+        	pool.returnResource(jedis);
         }
 
         costMapPerThread.put("avgSetCostPerThread", avgSetCostPerThread);
